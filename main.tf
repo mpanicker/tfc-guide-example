@@ -21,7 +21,7 @@ data "aws_ami" "ubuntu" {
 resource "aws_instance" "ubuntu" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
-  vpc_security_group_ids = [aws_security_group.basic_security.id]
+  security_groups = ["${aws_security_group.sg.name}"]
 
   tags = {
     Name                 = var.instance_name
@@ -37,4 +37,5 @@ resource "aws_security_group" "sg" {
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+  } 	
 }
