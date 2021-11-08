@@ -21,9 +21,20 @@ data "aws_ami" "ubuntu" {
 resource "aws_instance" "ubuntu" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
+  vpc_security_group_ids = [aws_security_group.basic_security.id]
 
   tags = {
     Name                 = var.instance_name
     "Linux Distribution" = "Ubuntu"
   }
+}
+
+resource "aws_security_group" "sg" {
+  name        = "sg"
+  description = "Web Security Group for HTTP"
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
 }
